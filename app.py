@@ -9,6 +9,7 @@ from selenium.common.exceptions import *
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.common.keys import Keys
 import schedule
 from time import sleep
 
@@ -75,7 +76,7 @@ def iniciar_driver():
 
 def scrapy_website1():
     driver, wait = iniciar_driver()
-    driver.get('https://site1produto.netlify.app')
+    driver.get('https://site1produto.netlify.app/')
     # Xpath = //tag[@attribute='value']
     # name of the product
     names = wait.until(expected_conditions.visibility_of_all_elements_located(
@@ -88,6 +89,7 @@ def scrapy_website1():
     # image link
     image_link = wait.until(expected_conditions.visibility_of_all_elements_located(
         (By.XPATH, "//div[@class='img-box']/img")))
+
     iphone_name = names[0].text
     gopro_name = names[1].text
 
@@ -106,19 +108,17 @@ def scrapy_website1():
 
 
 def scrapy_website2():
-    driver, wait = iniciar_driver() 
-    driver.get('https://site2produto.netlify.app')
-    # Xpath = //tag[@attribute='value']
-    # name of the product
-    names = wait.until(expected_conditions.visibility_of_all_elements_located(
-        (By.XPATH, "//div[@class='why-text']//h4")))
-    # get price
+    driver, wait = iniciar_driver()
+    driver.get('https://site2produto.netlify.app/')
+
     prices = wait.until(expected_conditions.visibility_of_all_elements_located(
         (By.XPATH, "//div[@class='why-text']//h5")))
-    # get site
+
     site = driver.current_url
-    # image link
-    image_link = wait.until(expected_conditions.visibility_of_all_elements_located(
+
+    names = wait.until(expected_conditions.visibility_of_all_elements_located(
+        (By.XPATH, "//div[@class='why-text']")))
+    image_link = wait.until(expected_conditions.visibility_of_any_elements_located(
         (By.XPATH, "//img[@class='img-fluid']")))
 
     iphone_name = names[0].text.split('\n')[0]
@@ -130,7 +130,6 @@ def scrapy_website2():
     iphone_image = image_link[0].get_attribute('src')
     gopro_image = image_link[1].get_attribute('src')
 
-    # date quotation
     new_product(sql, connection, iphone_name, iphone_price,
                 site, datetime.now(), iphone_image)
     new_product(sql, connection, gopro_name, gopro_price,
@@ -141,7 +140,7 @@ def scrapy_website2():
 
 def scrapy_website3():
     driver, wait = iniciar_driver()
-    driver.get('https://site3produto.netlify.app')
+    driver.get('https://site3produto.netlify.app/')
     # Xpath = //tag[@attribute='value']
     # name of the product
     names = wait.until(expected_conditions.visibility_of_all_elements_located(
@@ -181,9 +180,9 @@ def run_task():
     scrapy_website3()
 
 
-schedule.every().day.at('06:00').do(run_task)
-
-
-while True:
-    schedule.run_pending()
-    sleep(1)
+try:
+    run_task()
+except Exception as e:
+    print(f"An error occurred: {e}")
+    import traceback
+    print(traceback.format_exc())
