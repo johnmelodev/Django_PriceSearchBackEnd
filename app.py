@@ -47,8 +47,7 @@ def iniciar_driver():
     chrome_options = Options()
 
     arguments = ['--lang=en-us', '--window-size=1920,1080',
-                 '--incognito']
-    # '--headless'
+                 '--incognito', '--headless']
 
     for argument in arguments:
         chrome_options.add_argument(argument)
@@ -103,16 +102,88 @@ def scrapy_website1():
                 site, datetime.now(), iphone_image)
     new_product(sql, connection, gopro_name, gopro_price,
                 site, datetime.now(), gopro_image)
+    print('1- Success')
 
 
 def scrapy_website2():
-    driver, wait = iniciar_driver()
+    driver, wait = iniciar_driver() 
     driver.get('https://site2produto.netlify.app')
+    # Xpath = //tag[@attribute='value']
+    # name of the product
+    names = wait.until(expected_conditions.visibility_of_all_elements_located(
+        (By.XPATH, "//div[@class='why-text']//h4")))
+    # get price
+    prices = wait.until(expected_conditions.visibility_of_all_elements_located(
+        (By.XPATH, "//div[@class='why-text']//h5")))
+    # get site
+    site = driver.current_url
+    # image link
+    image_link = wait.until(expected_conditions.visibility_of_all_elements_located(
+        (By.XPATH, "//img[@class='img-fluid']")))
+
+    iphone_name = names[0].text.split('\n')[0]
+    gopro_name = names[1].text.split('\n')[0]
+
+    iphone_price = prices[0].text.split('$')[1]
+    gopro_price = prices[1].text.split('$')[1]
+
+    iphone_image = image_link[0].get_attribute('src')
+    gopro_image = image_link[1].get_attribute('src')
+
+    # date quotation
+    new_product(sql, connection, iphone_name, iphone_price,
+                site, datetime.now(), iphone_image)
+    new_product(sql, connection, gopro_name, gopro_price,
+                site, datetime.now(), gopro_image)
+
+    print('2- Success')
 
 
 def scrapy_website3():
     driver, wait = iniciar_driver()
     driver.get('https://site3produto.netlify.app')
+    # Xpath = //tag[@attribute='value']
+    # name of the product
+    names = wait.until(expected_conditions.visibility_of_all_elements_located(
+        (By.XPATH, '//div[@class="product__item__text"]//h6//a')))
+    # get price
+    prices = wait.until(expected_conditions.visibility_of_all_elements_located(
+        (By.XPATH, '//div[@class="product__item__text"]//h5')))
+    # get site
+    site = driver.current_url
+    # image link
+    image_link = wait.until(expected_conditions.visibility_of_all_elements_located(
+        (By.XPATH, '//div[@class="product__item__pic set-bg"]')))
+
+    iphone_name = names[0].text
+    gopro_name = names[1].text
+
+    iphone_price = prices[0].text.split('$')[1]
+    gopro_price = prices[1].text.split('$')[1]
+
+    iphone_image = driver.current_url + \
+        image_link[0].get_attribute('style').split(' ')[1][5:-3]
+    gopro_image = driver.current_url + \
+        image_link[1].get_attribute('style').split(' ')[1][5:-3]
+
+    # date quotation
+    new_product(sql, connection, iphone_name, iphone_price,
+                site, datetime.now(), iphone_image)
+    new_product(sql, connection, gopro_name, gopro_price,
+                site, datetime.now(), gopro_image)
+
+    print('3- Success')
 
 
-scrapy_website1()
+def run_task():
+    scrapy_website1()
+    scrapy_website2()
+    scrapy_website3()
+
+
+schedule.every().day.at('06:00').do(run_task)
+
+
+while True:
+    schedule.run_pending()
+    sleep(1)

@@ -11,3 +11,5 @@ https://site1produto.netlify.app
 porque caso fizesse em sites reais de preco, iriam mudar constantemente transformando as funcionalidades obsoletas
 
 como esse foi um projeto feito para um cliente privado, para exportar as funcionalidades de scrapy e front end e back end com django exportei para o github com um site ficticio
+
+pode simplesmente adicionando uma nova def e um novo produjto e ajustando os xpaths do selenium
