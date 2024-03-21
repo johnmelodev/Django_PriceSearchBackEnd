@@ -44,7 +44,7 @@ def new_product(sql, connection, name, price, site, date_quotation, image_link):
 # Webscraping with Selenium
 
 
-def iniciar_driver():
+def start_driver():
     chrome_options = Options()
 
     arguments = ['--lang=en-us', '--window-size=1920,1080',
@@ -75,7 +75,7 @@ def iniciar_driver():
 
 
 def scrapy_website1():
-    driver, wait = iniciar_driver()
+    driver, wait = start_driver()
     driver.get('https://site1produto.netlify.app/')
     # Xpath = //tag[@attribute='value']
     # name of the product
@@ -108,7 +108,7 @@ def scrapy_website1():
 
 
 def scrapy_website2():
-    driver, wait = iniciar_driver()
+    driver, wait = start_driver()
     driver.get('https://site2produto.netlify.app/')
 
     prices = wait.until(expected_conditions.visibility_of_all_elements_located(
@@ -139,7 +139,7 @@ def scrapy_website2():
 
 
 def scrapy_website3():
-    driver, wait = iniciar_driver()
+    driver, wait = start_driver()
     driver.get('https://site3produto.netlify.app/')
     # Xpath = //tag[@attribute='value']
     # name of the product
