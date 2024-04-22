@@ -1,15 +1,33 @@
 # PriceSearchBackEnd
 
-feito com selenium for webscraper
-para popular o banco de dados
+This is the backend part of a fullstack project. It is built with Selenium for web scraping to populate the database. An automated task is set to run every day at 6 AM.
 
-assim criar um agendamento para que rode todo dia as 6 da manha
+A fictitious website [site1produto](https://site1produto.netlify.app) was created to pull online functionalities because if it was done on real price sites, they would constantly change making the functionalities obsolete. So if you create this back-end functionality, make sure to constantly maintain it.
 
+This project was done for a private client, to export the functionalities of Scrapy and front end and back end with Django, it was exported to Github.
 
-foi criado um site ficticion para puxar funcionalidades online chamado 
-https://site1produto.netlify.app
-porque caso fizesse em sites reais de preco, iriam mudar constantemente transformando as funcionalidades obsoletas
+You can simply add a new function and a new product and adjust the Selenium xpaths.
 
-como esse foi um projeto feito para um cliente privado, para exportar as funcionalidades de scrapy e front end e back end com django exportei para o github com um site ficticio
+## Installation
 
-pode simplesmente adicionando uma nova def e um novo produjto e ajustando os xpaths do selenium
+```bash
+pip3 install -r requirements.txt
+```
+
+## Usage
+
+The backend is designed to scrape data from three different websites. Each website is scraped by a separate function: `scrapy_website1()`, `scrapy_website2()`, and `scrapy_website3()`. These functions are called in the `run_task()` function which is intended to be run daily at 6 AM.
+
+The data scraped from the websites is stored in a PostgreSQL database. The `new_product()` function is used to insert new products into the database.
+
+## Author
+
+👤 Joao Melo
+
+- Github: [@johnmelodev](https://github.com/johnmelodev)
+- LinkedIn: [@joao-melo-dev](https://www.linkedin.com/in/joao-melo-dev)
+
+## Show Your Support
+
+Give a ⭐️ if this project helped you!
+```
